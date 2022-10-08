@@ -1,0 +1,17 @@
+#newsidebar{
+    height: auto;
+    max-width: 300px;
+    background-color: rgb(46, 42, 42);
+    color: white;
+}
+
+#page-content-wrapper{
+    left: 200px;
+}
+.link-hover{
+    margin: 0px;
+}
+.link-hover:hover , .active {
+    background-color: white!important; 
+    color: black!important;
+}
