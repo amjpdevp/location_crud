@@ -5,7 +5,10 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
-class loginaccess
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Route;
+
+class Permission
 {
     /**
      * Handle an incoming request.
@@ -16,12 +19,14 @@ class loginaccess
      */
     public function handle(Request $request, Closure $next)
     {   
-    
-        if(Sentinel::guest())
-    {
-        session()->flash('error', 'Invalid Access'); 
-        return redirect()->route('login');
-    }
+        $permission = Route::currentRouteName();
+        
+        $user = Sentinel::getUser();
+        if (!$user->hasAccess($permission)){
+            Session::flash('message', 'You Does not have Permission');
+            Session::flash('alert-class','alert-danger');
+            return back();
+        }
         return $next($request);
     }
 }

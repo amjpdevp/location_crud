@@ -12,7 +12,9 @@
 @endif
 <div class="d-flex justify-content-between my-2">
     <h2>Your Branches  </h2>
+    @if($user->hasAccess(['location.create']))
     <button type="button" class="btn btn-primary rounded" data-toggle="modal" data-target="#exampleModal" >Add New Location</button>
+    @endif
   </div>
   
   <table class="table rounded border">                                                                                                                                
@@ -23,8 +25,9 @@
           <th scope="col">email</th>
           <th scope="col">Business</th>
           <th scope="col">Address</th>
+          @if($user->hasAccess(['location.edit']) || $user->hasAccess(['location.delete']))
           <th scope="col">Actions</th>
-  
+          @endif
         </tr>
       </thead>
       <tbody>
@@ -41,8 +44,12 @@
           <td>{{$location->business->name}}</td>
           <td>{{$location->address}}</td>
           <td>
+            @if($user->hasAccess(['location.edit']))
             <a href="{{ route('location.edit',[$location->id]) }}"><button type="button" class="btn btn-primary rounded px-5">Edit</button></a>
+            @endif
+            @if($user->hasAccess(['location.delete']))
             <button type="button" class="btn btn-danger rounded px-5" onclick='Deletelocation(this)'>Delete</button>
+            @endif
           </td>
         </tr>
         @endforeach

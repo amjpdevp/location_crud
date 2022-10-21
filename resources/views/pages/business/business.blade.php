@@ -2,8 +2,11 @@
 @section('content')
 
 <div class="d-flex justify-content-between my-2">
+  
   <h2>Your Company</h2>
-  <button type="button" class="btn btn-primary rounded" data-toggle="modal" data-target="#exampleModal" >Register New Company</button>
+  @if($user->hasAccess(['business.create']))
+  <button type="button" class="btn btn-primary rounded ms-2" data-toggle="modal" data-target="#exampleModal" >Register New Company</button>
+  @endif
 </div>
 <table class="table rounded border w-100">
     <thead>
@@ -12,9 +15,10 @@
         <th scope="col">Name</th>
         <th scope="col">email</th>
         <th scope="col">Address</th>
-        <th scope="col">Locations</th>
+        
+        @if($user->hasAccess(['business.edit']) || $user->hasAccess(['business.delete']))
         <th scope="col">Actions</th>
-
+        @endif
       </tr>
     </thead>
     <tbody>
@@ -26,13 +30,13 @@
         <td>{{$business->email}}</td>
         <td>{{$business->address}}</td>
         <td>
-      @foreach($business->locations as $location)
-          {{$location->name}},
-          @endforeach
-        </td>
-        <td>
-          <a href="{{ route('business.edit',[$business->id]) }}"><button type="button" class="btn btn-primary rounded" onclick=EditBusiness($this)>Edit</button></a>
+          <a href="{{ route('business.location.view',[$business->id]) }}"><button type="button" class="btn btn-primary rounded" >View</button></a>
+          @if($user->hasAccess(['business.edit']))
+          <a href="{{ route('business.edit',[$business->id]) }}"><button type="button" class="btn btn-warning rounded" onclick=EditBusiness($this)>Edit</button></a>
+          @endif
+          @if($user->hasAccess(['business.delete']))
           <button type="button" class="btn btn-danger rounded " onclick='DeleteBusiness(this)'>Delete</button>
+          @endif
         </td>
       </tr>
       @endforeach
@@ -40,6 +44,9 @@
     @csrf
   </table>
   {{$businesses->links()}}
+  @error('address')
+    <div class="alert alert-danger">{{ $message }}</div>
+  @enderror
   @if(Session::has('message'))
       <div class="alert {{ Session::get('alert-class') }}">
          {{ Session::get('message') }}
@@ -74,10 +81,10 @@
           </div>
         
         </form>
+         </div>
         </div>
       </div>
     </div>
-    @error('address')
-    <div class="alert alert-danger">{{ $message }}</div>
-    @enderror
+   
+    
 @stop

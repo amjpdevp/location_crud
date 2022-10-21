@@ -39,8 +39,11 @@
             <form action="{{route('user.store')}}" method="post">
             @csrf
             <div class="form-group py-2">
-                <input type="text" class="form-control" name="name" placeholder="Enter Your Name" required="required">
+                <input type="text" class="form-control" name="firstname" placeholder="Enter Your First Name" required="required">
             </div>
+            <div class="form-group py-2">
+              <input type="text" class="form-control" name="lastname" placeholder="Enter Your Last Name" required="required">
+          </div>
             <div class="form-group py-2">
                 <input type="email" class="form-control" name="email" placeholder="Enter Your E-mail" required="required">
             </div>
